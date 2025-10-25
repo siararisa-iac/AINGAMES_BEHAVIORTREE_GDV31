@@ -21,17 +21,20 @@ public class PlayerHunger : MonoBehaviour
     // with the same signature
     public static HungerDelegate OnHungerUpdate;
 
-
+    public bool IsHungry => hunger <= maxHunger / 2.0f;
     public float MaxHunger => maxHunger;
     public float Hunger
     {
         get
         {
-            return Mathf.Clamp(hunger, 0, maxHunger);
+            return hunger;
         }
         private set
         {
-            hunger = value;
+            // Clamp the value so it doesnt go lower than 0 or higher than max
+            hunger = Mathf.Clamp(value, 0, maxHunger);
+            // Invoke the delegate here so everytime we change the value, the events are called
+            OnHungerUpdate.Invoke(hunger, MaxHunger);
         }
     }
     //or
@@ -47,7 +50,6 @@ public class PlayerHunger : MonoBehaviour
     private void Update()
     {
         Hunger -= Time.deltaTime * hungerDecreaseRate;
-        OnHungerUpdate.Invoke(Hunger, MaxHunger);
     }
 
     public void IncreaseHunger(float value)
@@ -57,7 +59,7 @@ public class PlayerHunger : MonoBehaviour
 
     private void PrintHunger(float value, float maxValue)
     {
-        Debug.Log($"{value} / {maxValue}");
+        //Debug.Log($"{value} / {maxValue}");
     }
 
     private void CheckHunger(float current, float max)

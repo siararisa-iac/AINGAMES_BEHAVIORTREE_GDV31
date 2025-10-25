@@ -13,7 +13,7 @@ public class HungerBar : MonoBehaviour
     private void UpdateHunger(float current, float max)
     {
         hungerFill.fillAmount = current / max;
-        hungerText.text = $"{current} / {max}";
+        hungerText.text = $"{current.ToString("N0")} / {max}";
     }
 
     private void Start()
